@@ -47,7 +47,7 @@ module Fastlane
 
         res = http.request(req)
         current_edit = JSON.parse(res.body)
-        
+
         return current_edit['id']
       end
 
@@ -115,8 +115,7 @@ module Fastlane
       def self.replaceExistingApk(token, app_id, edit_id, apk_id, eTag, apk_path, should_retry = true)
 
         replace_apk_path = "/v1/applications/#{app_id}/edits/#{edit_id}/apks/#{apk_id}/replace"
-        local_apk = File.open(apk_path, "r").read
-
+        local_apk = File.binread(apk_path)
         apk_uri = URI.parse(apk_path)
         apk_name = apk_uri.path.split('/').last
 
@@ -168,7 +167,7 @@ module Fastlane
 
         add_apk_path = "/v1/applications/#{app_id}/edits/#{edit_id}/apks/upload"
         add_apk_url = BASE_URL + add_apk_path
-        local_apk = File.open(apk_path, 'r').read
+        local_apk = File.binread(apk_path)
 
         uri = URI(add_apk_url)
         http = Net::HTTP.new(uri.host, uri.port)
